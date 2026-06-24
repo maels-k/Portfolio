@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Cyber - Ismaël Koné
 
-## Getting Started
+Portfolio dynamique et sécurisé spécialisé en Cybersécurité, construit avec Next.js, Tailwind CSS et Supabase.
 
-First, run the development server:
+## Fonctionnalités
+- 🌍 **Multilingue** : Support complet Français/Anglais.
+- 🔐 **Admin Panel** : Interface sécurisée pour gérer projets, compétences et profil.
+- 🎨 **Design Cyber** : Thème Blue Team avec animations fluides.
+- 📊 **Dynamique** : Données récupérées en temps réel depuis Supabase.
 
+## Installation Locale
+
+### 1. Cloner le projet et installer les dépendances
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configuration des variables d'environnement
+Créez un fichier `.env.local` à la racine :
+```env
+NEXT_PUBLIC_SUPABASE_URL=votre_url_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon_supabase
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Schéma de la Base de Données
+Exécutez ce SQL dans votre éditeur Supabase pour créer les tables nécessaires :
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sql
+-- Table Profil
+CREATE TABLE profile (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT,
+  title_fr TEXT,
+  title_en TEXT,
+  bio_fr TEXT,
+  bio_en TEXT,
+  cv_url TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-## Learn More
+-- Table Projets
+CREATE TABLE projects (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title_fr TEXT,
+  title_en TEXT,
+  description_fr TEXT,
+  description_en TEXT,
+  role_fr TEXT,
+  role_en TEXT,
+  technologies TEXT[],
+  image_url TEXT,
+  github_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-To learn more about Next.js, take a look at the following resources:
+-- Table Compétences (Skills)
+CREATE TABLE skills (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT,
+  category TEXT,
+  icon TEXT,
+  level INTEGER,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-- Table Parcours (Timeline)
+CREATE TABLE timeline (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  year TEXT,
+  title_fr TEXT,
+  title_en TEXT,
+  institution_fr TEXT,
+  institution_en TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Lancer le serveur de développement
+```bash
+npm run dev
+```
+Accédez à [http://localhost:3000](http://localhost:3000).
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Accès Admin
+L'interface d'administration est disponible sur `/admin/login`.
+Vous devez créer un utilisateur dans l'onglet **Authentication** de votre console Supabase pour vous connecter.
