@@ -9,107 +9,80 @@ export default function Timeline({ timeline }: { timeline: TimelineItem[] }) {
   const { lang, t } = useI18n();
 
   return (
-    <section id="timeline" className="py-32 relative overflow-hidden">
+    <section id="timeline" className="py-32 relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col items-center mb-20">
-          <motion.div
+        <div className="text-center mb-24">
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2 text-cyber-cyan font-mono text-sm mb-4"
+            className="text-4xl lg:text-6xl font-black mb-6 text-slate-900 dark:text-white"
           >
-            <span className="w-8 h-px bg-cyber-cyan/30"></span>
-            CAREER_PATH.EXE
-            <span className="w-8 h-px bg-cyber-cyan/30"></span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-black text-white text-center"
-          >
-            Parcours & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue to-cyber-cyan">Timeline</span>
+            Mon <span className="title-gradient">Parcours</span>
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg"
+          >
+            Expériences professionnelles et formations académiques.
+          </motion.p>
         </div>
 
-        <div className="max-w-5xl mx-auto relative">
-          {/* Central Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyber-blue/50 via-slate-800 to-transparent -translate-x-1/2"></div>
+        <div className="max-w-4xl mx-auto relative">
+          {/* Vertical line */}
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-800 -translate-x-1/2 hidden md:block"></div>
 
-          <div className="space-y-16 md:space-y-24">
+          <div className="space-y-16">
             {timeline.map((item, index) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className={`relative flex flex-col md:flex-row items-start md:items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
               >
-                {/* Connector Dot */}
-                <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-slate-900 border-2 border-cyber-cyan z-10 shadow-[0_0_15px_rgba(34,211,238,0.5)]">
-                  <div className="absolute inset-0 rounded-full animate-ping bg-cyber-cyan/30"></div>
-                </div>
+                {/* Dot */}
+                <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-white dark:border-slate-950 hidden md:block z-10 shadow-lg shadow-primary/40"></div>
 
-                <div className="w-full md:w-[45%] pl-12 md:pl-0">
-                  <div className="group relative">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-cyber-blue/20 to-cyber-cyan/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                    <div className="cyber-card p-8 rounded-2xl border border-slate-800/50 bg-slate-950/40 relative">
-                      <div className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between">
-                          <div className="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyber-cyan tracking-tighter uppercase">
-                            {item.type}
-                          </div>
-                          <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500">
-                            <Calendar className="w-3 h-3" /> {item.period}
-                          </div>
+                <div className="w-full md:w-1/2 group">
+                  <div className="premium-card p-8 bg-white dark:bg-slate-900 shadow-sm group-hover:border-primary/30 transition-all">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-primary">
+                          {item.type === 'formation' ? <GraduationCap className="w-6 h-6" /> : <Briefcase className="w-6 h-6" />}
                         </div>
-
-                        <div className="flex items-start gap-4">
-                          <div className="mt-1 w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center border border-slate-700/50 shadow-inner">
-                            {item.type === 'formation' ?
-                              <GraduationCap className="w-6 h-6 text-purple-400" /> :
-                              <Briefcase className="w-6 h-6 text-cyber-blue" />
-                            }
-                          </div>
-                          <div>
-                            <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyber-cyan transition-colors">
-                              {lang === 'fr' ? item.title_fr : item.title_en}
-                            </h3>
-                            <div className="flex items-center gap-2 text-gray-400 font-medium text-sm">
-                              <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan/50"></span>
-                              {item.institution}
-                            </div>
-                          </div>
+                        <div>
+                          <h3 className="font-bold text-slate-900 dark:text-white text-xl leading-tight">
+                            {lang === 'fr' ? item.title_fr : item.title_en}
+                          </h3>
+                          <p className="text-primary font-bold text-sm tracking-wide">{item.institution}</p>
                         </div>
+                      </div>
+                    </div>
 
-                        <p className="text-gray-400 text-sm leading-relaxed border-l-2 border-slate-800 pl-4 py-1 italic">
-                          {lang === 'fr' ? item.description_fr : item.description_en}
-                        </p>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                      {lang === 'fr' ? item.description_fr : item.description_en}
+                    </p>
 
-                        <div className="pt-2 flex items-center gap-2 text-xs font-mono text-cyber-cyan/40 group-hover:text-cyber-cyan/70 transition-colors">
-                          VIEW_DETAILS <ChevronRight className="w-3 h-3" />
-                        </div>
+                    <div className="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+                        <Calendar className="w-4 h-4" /> {item.period}
+                      </div>
+                      <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 transition-transform">
+                        <ChevronRight className="w-5 h-5" />
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="hidden md:block md:w-[45%]">
-                  <div className={`flex flex-col ${index % 2 === 0 ? 'items-start' : 'items-end'} opacity-20 group-hover:opacity-40 transition-opacity`}>
-                    <div className="text-6xl font-black text-slate-800 select-none">
-                      0{index + 1}
-                    </div>
-                  </div>
-                </div>
+                <div className="hidden md:block md:w-1/2"></div>
               </motion.div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Background Decor */}
-      <div className="absolute top-1/2 left-0 w-64 h-64 bg-cyber-blue/5 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 blur-[150px] rounded-full translate-x-1/3"></div>
     </section>
   );
 }

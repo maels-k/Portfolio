@@ -6,6 +6,7 @@ import { Shield, Menu, X, Github, Linkedin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/i18n';
 import LanguageSwitcher from './LanguageSwitcher';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -50,10 +51,11 @@ export default function Navbar() {
               {link.name}
             </a>
           ))}
-          <div className="h-4 w-px bg-slate-800 mx-2"></div>
+          <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <LanguageSwitcher />
-            <Link href="https://github.com" target="_blank" className="text-gray-400 hover:text-white transition-colors">
+            <Link href="https://github.com" target="_blank" className="text-gray-400 hover:text-primary dark:hover:text-white transition-colors">
               <Github className="w-5 h-5" />
             </Link>
             <Link href="https://linkedin.com" target="_blank" className="text-gray-400 hover:text-white transition-colors">
@@ -64,8 +66,9 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <div className="md:hidden flex items-center gap-4">
+          <ThemeToggle />
           <LanguageSwitcher />
-          <button className="text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="text-slate-900 dark:text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>

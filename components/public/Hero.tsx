@@ -1,7 +1,7 @@
 'use client';
 
 import { Profile } from '@/types';
-import { Download, ChevronRight, Activity } from 'lucide-react';
+import { Download, ChevronRight, Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useI18n } from '@/lib/i18n';
 import { motion } from 'framer-motion';
@@ -9,148 +9,144 @@ import { motion } from 'framer-motion';
 export default function Hero({ profile }: { profile: Partial<Profile> }) {
   const { lang, t } = useI18n();
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } }
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-cyber-black">
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="grid-bg absolute inset-0 opacity-40"></div>
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyber-blue/20 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyber-cyan/10 rounded-full blur-[120px]"></div>
+    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white dark:bg-cyber-black">
+      {/* Background Decor */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="grid-bg absolute inset-0 opacity-40 dark:opacity-20"></div>
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/10 dark:bg-primary/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary/10 dark:bg-secondary/5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-10">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex-1 text-center lg:text-left"
+          >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10"
+              variants={itemVariants}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 border border-primary/10"
             >
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-green opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyber-green"></span>
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyber-green/90">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
                 {profile.availability ? t('hero.available') : t('hero.busy')}
               </span>
             </motion.div>
 
-            <div className="space-y-6">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-6xl lg:text-8xl font-bold tracking-tight title-gradient leading-[0.9]"
-              >
-                {profile.full_name || 'Ismaël Koné'}
-              </motion.h1>
+            <motion.h1
+              variants={itemVariants}
+              className="text-5xl lg:text-7xl xl:text-8xl font-black tracking-tight mb-6 leading-[1.1] text-slate-900 dark:text-white"
+            >
+              {profile.full_name || 'Ismaël Koné'}
+            </motion.h1>
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="flex items-center gap-4"
-              >
-                <div className="h-px w-12 bg-cyber-cyan"></div>
-                <h2 className="text-xl lg:text-2xl font-mono text-cyber-cyan tracking-wider">
-                  {lang === 'fr' ? profile.title_fr : profile.title_en}
-                </h2>
-              </motion.div>
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl lg:text-3xl font-bold title-gradient mb-8"
+            >
+              {lang === 'fr' ? profile.title_fr : profile.title_en}
+            </motion.h2>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-gray-400 text-lg lg:text-xl max-w-2xl leading-relaxed font-light"
-              >
-                {lang === 'fr' ? profile.hero_text_fr : profile.hero_text_en}
-              </motion.p>
-            </div>
+            <motion.p
+              variants={itemVariants}
+              className="text-slate-600 dark:text-slate-400 text-lg lg:text-xl max-w-2xl mb-10 leading-relaxed font-medium mx-auto lg:mx-0"
+            >
+              {lang === 'fr' ? profile.hero_text_fr : profile.hero_text_en}
+            </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-wrap gap-6 pt-4"
+              variants={itemVariants}
+              className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12"
             >
-              <Link href="#projects" className="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
-                <span className="relative z-10 flex items-center gap-2">
-                  {t('hero.cta.labs')}
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 bg-cyber-cyan translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+              <Link href="#projects" className="px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg shadow-primary/20">
+                {t('hero.cta.labs')}
+                <ChevronRight className="w-4 h-4" />
               </Link>
 
-              <Link href={profile.cv_url || '#'} target="_blank" className="group px-8 py-4 glass border border-white/10 hover:border-white/30 text-white font-bold rounded-full transition-all flex items-center gap-2">
-                <Download className="w-4 h-4 text-cyber-cyan group-hover:scale-110 transition-transform" />
+              <Link href={profile.cv_url || '#'} target="_blank" className="px-8 py-4 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold rounded-2xl border border-slate-200 dark:border-white/10 hover:border-primary/30 transition-all flex items-center gap-2">
+                <Download className="w-4 h-4" />
                 {t('hero.cta.cv')}
               </Link>
             </motion.div>
-          </div>
+
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center justify-center lg:justify-start gap-6"
+            >
+              <Link href={profile.social_links?.github || '#'} target="_blank" className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
+                <Github className="w-6 h-6" />
+              </Link>
+              <Link href={profile.social_links?.linkedin || '#'} target="_blank" className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
+                <Linkedin className="w-6 h-6" />
+              </Link>
+              <Link href={`mailto:${profile.social_links?.email}`} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
+                <Mail className="w-6 h-6" />
+              </Link>
+            </motion.div>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 relative hidden lg:block"
+            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex-1 relative"
           >
-            <div className="relative z-10 glass rounded-3xl p-6 border border-white/10 shadow-2xl scanline overflow-hidden">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/40"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/40"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/40"></div>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] text-gray-500 font-mono">
-                  <Activity className="w-3 h-3 text-cyber-green animate-pulse" />
-                  SYSTEM_STATUS: SECURE
-                </div>
-              </div>
+            <div className="relative w-72 h-72 lg:w-96 lg:h-96 mx-auto">
+              {/* Outer Rings */}
+              <div className="absolute inset-0 border-2 border-primary/20 rounded-[3rem] animate-[spin_20s_linear_infinite]"></div>
+              <div className="absolute inset-4 border-2 border-secondary/20 rounded-[2.5rem] animate-[spin_15s_linear_infinite_reverse]"></div>
 
-              <div className="space-y-4 font-mono text-xs leading-relaxed">
-                <div className="flex gap-3">
-                  <span className="text-cyber-cyan">root@cyber-lab:</span>
-                  <span className="text-white">~# whoami</span>
-                </div>
-                <div className="text-gray-400 pl-4">ismael_kone</div>
-
-                <div className="flex gap-3 mt-4">
-                  <span className="text-cyber-cyan">root@cyber-lab:</span>
-                  <span className="text-white">~# fetch --profile</span>
-                </div>
-                <div className="grid grid-cols-1 gap-2 pl-4">
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-gray-500 italic">ROLE</span>
-                    <span className="text-cyber-electric">Blue Team Analyst</span>
-                  </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-gray-500 italic">FOCUS</span>
-                    <span className="text-cyber-electric">Threat Hunting</span>
-                  </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-gray-500 italic">Uptime</span>
-                    <span className="text-cyber-green">99.9%</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mt-6">
-                  <span className="text-cyber-cyan animate-pulse">_</span>
-                  <div className="w-24 h-4 bg-white/5 rounded"></div>
+              {/* Image Container */}
+              <div className="absolute inset-8 rounded-[2rem] overflow-hidden bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-cyber-dark shadow-2xl animate-float">
+                <div className="w-full h-full flex items-center justify-center text-primary/20">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-32 h-32">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
                 </div>
               </div>
             </div>
 
-            {/* Decorative elements */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 border border-white/5 rounded-full"></div>
-            <div className="absolute -bottom-10 -left-10 w-24 h-24 border border-cyber-cyan/20 rounded-full blur-xl"></div>
+            {/* Floating Badges */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-4 right-12 px-4 py-2 bg-white dark:bg-cyber-dark rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 flex items-center gap-2"
+            >
+              <div className="w-2 h-2 rounded-full bg-accent"></div>
+              <span className="text-xs font-bold text-slate-900 dark:text-white">Expertise Cyber</span>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute -bottom-4 left-12 px-4 py-2 bg-white dark:bg-cyber-dark rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 flex items-center gap-2"
+            >
+              <div className="w-2 h-2 rounded-full bg-primary"></div>
+              <span className="text-xs font-bold text-slate-900 dark:text-white">Blue Team Specialist</span>
+            </motion.div>
           </motion.div>
         </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent to-white"></div>
       </div>
     </section>
   );

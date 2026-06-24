@@ -3,76 +3,111 @@
 import { Skill } from '@/types';
 import { useI18n } from '@/lib/i18n';
 import { motion } from 'framer-motion';
-import { Cpu } from 'lucide-react';
+import { Shield, Layout, Server, Database, Hammer } from 'lucide-react';
 
 export default function Skills({ skills }: { skills: Skill[] }) {
   const { t } = useI18n();
+
   const categories = [
-    'Expertise Cyber',
-    'Outils de Détection',
-    'Systèmes & Réseaux',
-    'Scripting / Code',
-    'Soft Skills'
+    { name: 'Expertise Cyber', icon: Shield, color: 'text-primary' },
+    { name: 'Frontend', icon: Layout, color: 'text-secondary' },
+    { name: 'Backend', icon: Server, color: 'text-indigo-500' },
+    { name: 'Base de données', icon: Database, color: 'text-accent' },
+    { name: 'Outils', icon: Hammer, color: 'text-amber-500' }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+
   return (
-    <section id="skills" className="py-32 bg-cyber-black relative">
+    <section id="skills" className="py-32 relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col items-center text-center mb-24">
-          <div className="px-4 py-1 rounded-full border border-cyber-blue/30 bg-cyber-blue/10 text-cyber-blue text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
-            arsenal_inventory.log
-          </div>
-          <h2 className="text-4xl lg:text-6xl font-bold mb-6 tracking-tight title-gradient">{t('skills.title')}</h2>
-          <p className="text-gray-400 max-w-2xl text-lg font-light leading-relaxed">{t('skills.subtitle')}</p>
+        <div className="text-center mb-24">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl lg:text-6xl font-black mb-6 text-slate-900 dark:text-white"
+          >
+            Arsenal <span className="title-gradient">Technique</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg"
+          >
+            {t('skills.subtitle')}
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((cat, idx) => {
-            const catSkills = skills.filter(s => s.category === cat);
-            if (catSkills.length === 0 && cat !== 'Expertise Cyber') return null;
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {categories.map((cat) => {
+            const catSkills = skills.filter(s => s.category === cat.name);
 
             return (
               <motion.div
-                key={cat}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="cyber-card p-10 rounded-[2.5rem] flex flex-col group overflow-hidden"
+                key={cat.name}
+                variants={cardVariants}
+                className="premium-card p-8 bg-white dark:bg-slate-900 shadow-sm"
               >
-                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Cpu className="w-20 h-20 text-white" />
-                </div>
-
-                <div className="flex items-center gap-3 mb-10">
-                  <div className="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyber-cyan shadow-[0_0_8px_#06b6d4]"></div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className={`w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center ${cat.color}`}>
+                    <cat.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-sm font-mono text-white uppercase tracking-[0.2em]">{cat}</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{cat.name}</h3>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="space-y-6">
                   {catSkills.length > 0 ? (
                     catSkills.map(skill => (
-                      <div
-                        key={skill.id}
-                        className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/5 hover:border-cyber-cyan/40 hover:bg-white/10 transition-all duration-300 group/skill"
-                      >
-                        <span className="text-sm font-light text-gray-400 group-hover/skill:text-white transition-colors">{skill.name}</span>
+                      <div key={skill.id} className="space-y-2">
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">{skill.name}</span>
+                          <span className="text-slate-400 font-mono">90%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: "90%" }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className={`h-full bg-gradient-to-r from-primary to-secondary`}
+                          />
+                        </div>
                       </div>
                     ))
                   ) : (
-                    <div className="text-gray-700 italic text-sm">awaiting_data...</div>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs italic">
+                        No skills listed yet...
+                      </span>
+                    </div>
                   )}
                 </div>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
-
-      {/* Decorative background element */}
-      <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
     </section>
   );
 }

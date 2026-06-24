@@ -1,0 +1,14 @@
+
+> tmp_app@0.1.0 dev
+> next dev
+
+⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.2:3001
+- Environments: .env.local
+✓ Ready in 684ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET / 200 in 8.0s (next.js: 394ms, application-code: 7.6s)
+ GET / 200 in 7.3s (next.js: 5ms, application-code: 7.3s)
