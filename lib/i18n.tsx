@@ -35,6 +35,7 @@ const translations = {
     'contact.title': 'Prêt à renforcer votre',
     'contact.subtitle': 'Blue Team',
     'contact.desc': "Je suis actuellement à la recherche de nouvelles opportunités en tant qu'Analyste SOC Junior ou Auditeur Sécurité. Discutons de la manière dont je peux contribuer à la protection de vos actifs.",
+    'contact.protocol': 'COMMUNICATION_PROTOCOL.SH',
     'contact.form.name': 'Identité',
     'contact.form.email': 'Canal de retour',
     'contact.form.subject': 'Objet de la requête',
@@ -43,6 +44,8 @@ const translations = {
     'contact.success.title': 'Message Transmis',
     'contact.success.desc': 'Votre demande a été cryptée et envoyée avec succès. Je vous répondrai sous 24h.',
     'contact.success.btn': 'Envoyer un autre message',
+    'footer.subtitle': 'Portfolio Cybersécurité',
+    'footer.built': 'Built for the Blue Team',
     'footer.rights': 'Tous droits réservés.',
   },
   en: {
@@ -69,6 +72,7 @@ const translations = {
     'contact.title': 'Ready to strengthen your',
     'contact.subtitle': 'Blue Team',
     'contact.desc': "I am currently looking for new opportunities as a Junior SOC Analyst or Security Auditor. Let's discuss how I can contribute to the protection of your assets.",
+    'contact.protocol': 'COMMUNICATION_PROTOCOL.SH',
     'contact.form.name': 'Identity',
     'contact.form.email': 'Return channel',
     'contact.form.subject': 'Subject of the request',
@@ -77,6 +81,8 @@ const translations = {
     'contact.success.title': 'Message Transmitted',
     'contact.success.desc': 'Your request has been encrypted and successfully sent. I will reply within 24 hours.',
     'contact.success.btn': 'Send another message',
+    'footer.subtitle': 'Cybersecurity Portfolio',
+    'footer.built': 'Built for the Blue Team',
     'footer.rights': 'All rights reserved.',
   }
 };

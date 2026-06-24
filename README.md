@@ -29,12 +29,16 @@ Exécutez ce SQL dans votre éditeur Supabase pour créer les tables nécessaire
 -- Table Profil
 CREATE TABLE profile (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT,
+  full_name TEXT,
   title_fr TEXT,
   title_en TEXT,
   bio_fr TEXT,
   bio_en TEXT,
+  hero_text_fr TEXT,
+  hero_text_en TEXT,
+  availability BOOLEAN DEFAULT TRUE,
   cv_url TEXT,
+  social_links JSONB DEFAULT '{}'::jsonb,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -50,6 +54,7 @@ CREATE TABLE projects (
   technologies TEXT[],
   image_url TEXT,
   github_url TEXT,
+  report_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -57,22 +62,41 @@ CREATE TABLE projects (
 CREATE TABLE skills (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT,
-  category TEXT,
+  category TEXT, -- 'Expertise Cyber', 'Outils de Détection', etc.
   icon TEXT,
-  level INTEGER,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Table Parcours (Timeline)
 CREATE TABLE timeline (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  year TEXT,
+  type TEXT, -- 'formation' or 'experience'
   title_fr TEXT,
   title_en TEXT,
-  institution_fr TEXT,
-  institution_en TEXT,
+  institution TEXT,
+  period TEXT,
+  description_fr TEXT,
+  description_en TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Activer RLS sur toutes les tables
+ALTER TABLE profile ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE skills ENABLE ROW LEVEL SECURITY;
+ALTER TABLE timeline ENABLE ROW LEVEL SECURITY;
+
+-- Créer les politiques de lecture publique
+CREATE POLICY "Lecture publique de profile" ON profile FOR SELECT USING (true);
+CREATE POLICY "Lecture publique de projects" ON projects FOR SELECT USING (true);
+CREATE POLICY "Lecture publique de skills" ON skills FOR SELECT USING (true);
+CREATE POLICY "Lecture publique de timeline" ON timeline FOR SELECT USING (true);
+
+-- Créer les politiques de modification pour les utilisateurs authentifiés
+CREATE POLICY "Admin modification de profile" ON profile FOR ALL TO authenticated USING (true);
+CREATE POLICY "Admin modification de projects" ON projects FOR ALL TO authenticated USING (true);
+CREATE POLICY "Admin modification de skills" ON skills FOR ALL TO authenticated USING (true);
+CREATE POLICY "Admin modification de timeline" ON timeline FOR ALL TO authenticated USING (true);
 ```
 
 ### 4. Lancer le serveur de développement
