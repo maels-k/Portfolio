@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-black: #020617;
+  --color-cyber-blue: #1e3a8a;
+  --color-cyber-electric: #3b82f6;
+  --color-cyber-cyan: #06b6d4;
+  --color-cyber-green: #22c55e;
+}
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+}
+
+.cyber-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.cyber-card:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 15px rgba(30, 58, 138, 0.3);
+}
+
+.glitch-text {
+  text-shadow: 2px 0 #06b6d4, -2px 0 #3b82f6;
+}
