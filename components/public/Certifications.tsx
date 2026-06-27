@@ -36,7 +36,7 @@ export default function Certifications({ certifications }: { certifications: Cer
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {certifications.map((cert, index) => (
             <motion.div
               key={cert.id}
@@ -44,33 +44,33 @@ export default function Certifications({ certifications }: { certifications: Cer
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.08 }}
-              className="group relative rounded-[2rem] overflow-hidden border border-slate-800 bg-slate-900/80 p-8 shadow-xl shadow-black/20"
+              className="group relative rounded-2xl md:rounded-[2rem] overflow-hidden border border-slate-800 bg-slate-900/80 p-6 md:p-8 shadow-xl shadow-black/20"
             >
-              <div className="flex items-center justify-between gap-3 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-cyber-blue/10 text-cyber-blue flex items-center justify-center">
+              <div className="flex flex-col gap-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-cyber-blue/10 text-cyber-blue flex items-center justify-center shrink-0">
                     <Award className="w-5 h-5" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white leading-tight">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg md:text-xl font-bold text-white leading-tight break-words">
                       {lang === 'fr' ? cert.title_fr : cert.title_en}
                     </h3>
-                    <p className="text-sm text-slate-400">{cert.issuer}</p>
+                    <p className="text-sm text-slate-400 break-words">{cert.issuer}</p>
                   </div>
                 </div>
-                <div className="text-right text-xs uppercase tracking-[0.3em] text-slate-500 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  {cert.issue_date}
+                <div className="flex items-center gap-2 text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-500">
+                  <Calendar className="w-4 h-4 shrink-0" />
+                  <span className="break-words">{cert.issue_date}</span>
                 </div>
               </div>
 
-              <p className="text-slate-400 leading-relaxed mb-6">
+              <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-6">
                 {lang === 'fr' ? cert.description_fr : cert.description_en}
               </p>
 
-              <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-800">
-                <div className="inline-flex items-center gap-2 text-sm text-slate-400">
-                  <BookOpen className="w-4 h-4" />
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-4 border-t border-slate-800">
+                <div className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-400">
+                  <BookOpen className="w-4 h-4 shrink-0" />
                   {lang === 'fr' ? 'Certification obtenue' : 'Certification earned'}
                 </div>
                 {cert.credential_url && (
@@ -78,9 +78,9 @@ export default function Certifications({ certifications }: { certifications: Cer
                     href={cert.credential_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-cyber-cyan hover:text-cyber-blue font-semibold text-sm"
+                    className="inline-flex items-center gap-2 text-cyber-cyan hover:text-cyber-blue font-semibold text-xs md:text-sm"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-4 h-4 shrink-0" />
                     {lang === 'fr' ? 'Voir le certificat' : 'View certificate'}
                   </a>
                 )}
