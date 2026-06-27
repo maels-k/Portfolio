@@ -5,8 +5,83 @@ import { GraduationCap, Briefcase, Calendar, ChevronRight } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import { motion } from 'framer-motion';
 
+const MONTHS: Record<string, number> = {
+  janvier: 0,
+  fevrier: 1,
+  février: 1,
+  mars: 2,
+  avril: 3,
+  mai: 4,
+  juin: 5,
+  juillet: 6,
+  aout: 7,
+  août: 7,
+  septembre: 8,
+  octobre: 9,
+  novembre: 10,
+  decembre: 11,
+  décembre: 11,
+  january: 0,
+  february: 1,
+  march: 2,
+  april: 3,
+  may: 4,
+  june: 5,
+  july: 6,
+  august: 7,
+  september: 8,
+  october: 9,
+  november: 10,
+  december: 11
+};
+
+function parsePeriodDate(value: string, end = false): Date | null {
+  const normalized = value.trim().toLowerCase().replace(/’/g, "'").replace(/\./g, '');
+  if (/présent|aujourd'hui|current|present|en cours|ongoing/.test(normalized)) {
+    return new Date();
+  }
+
+  const monthYearMatch = normalized.match(/(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre|january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/);
+  if (monthYearMatch) {
+    const month = MONTHS[monthYearMatch[1]];
+    const year = Number(monthYearMatch[2]);
+    return end ? new Date(year, month, 31) : new Date(year, month, 1);
+  }
+
+  const yearMatch = normalized.match(/(\d{4})/g);
+  if (yearMatch?.length) {
+    const year = Number(yearMatch[yearMatch.length - 1]);
+    return end ? new Date(year, 11, 31) : new Date(year, 0, 1);
+  }
+
+  return null;
+}
+
+function getTimelineBounds(item: TimelineItem): { end: Date; start: Date } {
+  const parts = item.period.split(/[-–—]|to/i).map(part => part.trim()).filter(Boolean);
+  const start = parts[0] ? parsePeriodDate(parts[0], false) : null;
+  const end = parts[1] ? parsePeriodDate(parts[1], true) : parsePeriodDate(parts[0], true);
+  return {
+    end: end || new Date(0),
+    start: start || end || new Date(0)
+  };
+}
+
+function compareTimeline(a: TimelineItem, b: TimelineItem) {
+  const aBounds = getTimelineBounds(a);
+  const bBounds = getTimelineBounds(b);
+
+  if (aBounds.end > bBounds.end) return -1;
+  if (aBounds.end < bBounds.end) return 1;
+  if (aBounds.start > bBounds.start) return -1;
+  if (aBounds.start < bBounds.start) return 1;
+
+  return b.created_at.localeCompare(a.created_at);
+}
+
 export default function Timeline({ timeline }: { timeline: TimelineItem[] }) {
   const { lang, t } = useI18n();
+  const sortedTimeline = [...timeline].sort(compareTimeline);
 
   return (
     <section id="timeline" className="py-32 relative bg-slate-50 dark:bg-slate-950 overflow-hidden">

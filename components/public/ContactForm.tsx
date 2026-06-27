@@ -31,10 +31,30 @@ export default function ContactForm() {
 
     setStatus('loading');
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setStatus('error');
+        setError(result.error || 'Une erreur est survenue lors de l\'envoi.');
+        return;
+      }
+
       setStatus('success');
-    }, 1500);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      console.error('Contact submit error:', err);
+      setStatus('error');
+      setError('Impossible de contacter le serveur.');
+    }
   };
 
   const inputClasses = "w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none font-medium placeholder:text-slate-400";

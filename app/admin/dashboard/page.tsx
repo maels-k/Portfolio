@@ -1,14 +1,42 @@
-import { Project, Skill, TimelineItem } from '@/types';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import { Briefcase, Code, GraduationCap, Trophy } from 'lucide-react';
 
 export default function AdminOverview() {
-  // Stat cards placeholder
-  const stats = [
-    { name: 'Projets', value: '3', icon: Briefcase, color: 'text-blue-500' },
-    { name: 'Compétences', value: '15', icon: Code, color: 'text-cyan-500' },
-    { name: 'Formations', value: '4', icon: GraduationCap, color: 'text-purple-500' },
+  const [stats, setStats] = useState([
+    { name: 'Projets', value: '0', icon: Briefcase, color: 'text-blue-500' },
+    { name: 'Compétences', value: '0', icon: Code, color: 'text-cyan-500' },
+    { name: 'Timeline', value: '0', icon: GraduationCap, color: 'text-purple-500' },
     { name: 'Certifications', value: '2', icon: Trophy, color: 'text-yellow-500' },
-  ];
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  async function fetchStats() {
+    setLoading(true);
+
+    const [{ count: projectCount }, { count: skillCount }, { count: timelineCount }, { count: certCount }] = await Promise.all([
+      supabase.from('projects').select('id', { count: 'exact', head: true }),
+      supabase.from('skills').select('id', { count: 'exact', head: true }),
+      supabase.from('timeline').select('id', { count: 'exact', head: true }),
+      supabase.from('certifications').select('id', { count: 'exact', head: true }),
+    ]);
+
+    setStats([
+      { name: 'Projets', value: String(projectCount ?? 0), icon: Briefcase, color: 'text-blue-500' },
+      { name: 'Compétences', value: String(skillCount ?? 0), icon: Code, color: 'text-cyan-500' },
+      { name: 'Timeline', value: String(timelineCount ?? 0), icon: GraduationCap, color: 'text-purple-500' },
+      { name: 'Certifications', value: String(certCount ?? 0), icon: Trophy, color: 'text-yellow-500' },
+    ]);
+    setLoading(false);
+  }
+
+  const displayValue = (value: string) => (loading ? '...' : value);
 
   return (
     <div className="space-y-8">
@@ -24,7 +52,7 @@ export default function AdminOverview() {
               <stat.icon className={`w-8 h-8 ${stat.color}`} />
               <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">{stat.name}</span>
             </div>
-            <div className="text-3xl font-bold">{stat.value}</div>
+            <div className="text-3xl font-bold">{displayValue(stat.value)}</div>
           </div>
         ))}
       </div>

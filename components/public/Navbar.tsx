@@ -23,6 +23,7 @@ export default function Navbar() {
     { name: t('nav.home'), href: '#' },
     { name: t('nav.about'), href: '#about' },
     { name: t('nav.skills'), href: '#skills' },
+    { name: t('nav.certifications'), href: '#certifications' },
     { name: t('nav.projects'), href: '#projects' },
     { name: t('nav.contact'), href: '#contact' },
   ];
@@ -37,7 +38,7 @@ export default function Navbar() {
           <div className="w-10 h-10 bg-cyber-blue/20 rounded-lg flex items-center justify-center border border-cyber-cyan/30 group-hover:border-cyber-cyan transition-colors">
             <Shield className="w-6 h-6 text-cyber-cyan" />
           </div>
-          <span className="text-xl font-bold tracking-tighter text-white">IK.SEC</span>
+          <span className="text-xl font-bold tracking-tighter text-white">ISMAEL.K</span>
         </Link>
 
         {/* Desktop Nav */}

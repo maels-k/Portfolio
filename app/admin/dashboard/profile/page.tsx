@@ -1,16 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Profile } from '@/types';
-import { Save, Loader2, User, Globe, FileText, CheckCircle } from 'lucide-react';
+import { Save, Loader2, User, Globe, FileText, CheckCircle, Upload } from 'lucide-react';
 
 export default function ProfileAdmin() {
   const [profile, setProfile] = useState<Partial<Profile>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadingCv, setUploadingCv] = useState(false);
   const [message, setMessage] = useState('');
   const [activeLang, setActiveLang] = useState<'fr' | 'en'>('fr');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cvInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchProfile();
@@ -20,6 +24,70 @@ export default function ProfileAdmin() {
     const { data } = await supabase.from('profile').select('*').single();
     if (data) setProfile(data);
     setLoading(false);
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload/profile-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Upload failed');
+      }
+
+      const { url } = await response.json();
+      setProfile({ ...profile, profile_image_url: url });
+      setMessage('Image uploadée avec succès !');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Erreur upload:', error);
+      setMessage('Erreur lors de l\'upload');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  }
+
+  async function handleCvUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingCv(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload/cv', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Upload failed');
+      }
+
+      const { url } = await response.json();
+      setProfile({ ...profile, cv_url: url });
+      setMessage('CV uploadé avec succès !');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Erreur upload CV:', error);
+      setMessage('Erreur lors de l\'upload du CV');
+    } finally {
+      setUploadingCv(false);
+      if (cvInputRef.current) cvInputRef.current.value = '';
+    }
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -98,8 +166,59 @@ export default function ProfileAdmin() {
               <input type="text" value={profile.social_links?.github || ''} onChange={e => setProfile({...profile, social_links: {...(profile.social_links || {}), github: e.target.value}})} className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 outline-none" />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400">Lien CV PDF</label>
-              <input type="text" value={profile.cv_url || ''} onChange={e => setProfile({...profile, cv_url: e.target.value})} className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 outline-none" />
+              <label className="text-sm text-gray-400">CV PDF</label>
+              <div className="flex gap-3">
+                <input
+                  ref={cvInputRef}
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleCvUpload}
+                  disabled={uploadingCv}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => cvInputRef.current?.click()}
+                  disabled={uploadingCv}
+                  className="flex-1 bg-slate-800 border border-slate-700 rounded-lg p-2.5 hover:border-cyber-cyan transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Upload className="w-4 h-4" />
+                  {uploadingCv ? 'Upload...' : 'Choisir un fichier PDF'}
+                </button>
+              </div>
+              {profile.cv_url && (
+                <div className="mt-2 p-2 bg-slate-800/50 rounded-lg text-xs text-gray-300 flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  CV uploadé ✓
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">Photo de profil</label>
+              <div className="flex gap-3">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="flex-1 bg-slate-800 border border-slate-700 rounded-lg p-2.5 hover:border-cyber-cyan transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Upload className="w-4 h-4" />
+                  {uploading ? 'Upload...' : 'Choisir une image'}
+                </button>
+              </div>
+              {profile.profile_image_url && (
+                <div className="mt-3 p-3 bg-slate-800/50 rounded-lg">
+                  <img src={profile.profile_image_url} alt="Profile preview" className="max-h-40 rounded-lg object-cover" />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -56,9 +56,18 @@ export default function Hero({ profile }: { profile: Partial<Profile> }) {
 
             <motion.h1
               variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: 'spring', stiffness: 120, damping: 16 }}
               className="text-5xl lg:text-7xl xl:text-8xl font-black tracking-tight mb-6 leading-[1.1] text-slate-900 dark:text-white"
             >
-              {profile.full_name || 'Ismaël Koné'}
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="block"
+              >
+                {profile.full_name || 'Ismaël Koné'}
+              </motion.span>
             </motion.h1>
 
             <motion.h2
@@ -119,11 +128,19 @@ export default function Hero({ profile }: { profile: Partial<Profile> }) {
 
               {/* Image Container */}
               <div className="absolute inset-8 rounded-[2rem] overflow-hidden bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-cyber-dark shadow-2xl animate-float">
-                <div className="w-full h-full flex items-center justify-center text-primary/20">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-32 h-32">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                  </svg>
-                </div>
+                {profile.profile_image_url ? (
+                  <img
+                    src={profile.profile_image_url}
+                    alt={profile.full_name || 'Profile'}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-primary/20">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-32 h-32">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
 

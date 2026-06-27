@@ -5,12 +5,14 @@ import { supabase } from '@/lib/supabase';
 import {
   LayoutDashboard,
   Briefcase,
+  Award,
   Code,
   User,
   LogOut,
   ShieldAlert,
   Menu,
-  X
+  X,
+  CalendarDays
 } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -24,14 +26,28 @@ export default function AdminLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      // Clear server-side session cookie first so middleware will stop protecting routes
+      await fetch('/api/auth/clear-session', { method: 'POST' });
+    } catch (err) {
+      // ignore network errors, proceed to client signOut
+    }
+
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      // ignore
+    }
+
     router.push('/admin/login');
   };
 
   const navItems = [
     { name: 'Vue d\'ensemble', icon: LayoutDashboard, href: '/admin/dashboard' },
     { name: 'Projets', icon: Briefcase, href: '/admin/dashboard/projects' },
+    { name: 'Certifications', icon: Award, href: '/admin/dashboard/certifications' },
     { name: 'Compétences', icon: Code, href: '/admin/dashboard/skills' },
+    { name: 'Timeline', icon: CalendarDays, href: '/admin/dashboard/timeline' },
     { name: 'Profil', icon: User, href: '/admin/dashboard/profile' },
   ];
 

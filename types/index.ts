@@ -40,6 +40,18 @@ export type TimelineItem = {
   created_at: string;
 };
 
+export type Certification = {
+  id: string;
+  title_fr: string;
+  title_en: string;
+  issuer: string;
+  issue_date: string;
+  credential_url: string | null;
+  description_fr: string;
+  description_en: string;
+  created_at: string;
+};
+
 export type Profile = {
   id: string;
   full_name: string;
@@ -51,6 +63,7 @@ export type Profile = {
   hero_text_en: string;
   availability: boolean;
   cv_url: string | null;
+  profile_image_url: string | null;
   social_links: {
     linkedin?: string;
     github?: string;

@@ -17,16 +17,46 @@ export default function AdminLogin() {
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError('Erreur de connexion : Identifiants invalides.');
-      setLoading(false);
-    } else {
+      if (error) {
+        setError(error.message || 'Erreur de connexion : Identifiants invalides.');
+        return;
+      }
+
+      if (!data?.session) {
+        setError('La connexion a échoué. Veuillez vérifier vos identifiants.');
+        return;
+      }
+
+      // Ensure server-side cookie session is set so middleware can recognize the user.
+      try {
+        const session = data.session;
+        const resp = await fetch('/api/auth/set-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_token: session.access_token, refresh_token: session.refresh_token }),
+        });
+
+        if (!resp.ok) {
+          const body = await resp.json().catch(() => ({}));
+          setError(body.error || 'Impossible d\'enregistrer la session côté serveur.');
+          return;
+        }
+      } catch (err) {
+        setError('Erreur réseau lors de l\'enregistrement de la session.');
+        return;
+      }
+
       router.push('/admin/dashboard');
+    } catch (err) {
+      setError('Erreur de connexion : impossible de contacter le serveur.');
+    } finally {
+      setLoading(false);
     }
   };
 

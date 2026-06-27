@@ -7,6 +7,20 @@ import { Plus, Trash2, Loader2, Code } from 'lucide-react';
 
 const CATEGORIES = [
   'Expertise Cyber',
+  'Réponse aux incidents',
+  'Chasse aux menaces',
+  'Analyse Forensique',
+  'SIEM',
+  'IDS/IPS',
+  'Analyse de Malware',
+  'Sécurité Réseau',
+  'Gestion des Vulnérabilités',
+  'SOC',
+  'Sécurité Cloud',
+  'Pentesting',
+  'Automatisation Sécurité',
+  'Analyse des Logs',
+  'Renseignement sur les Menaces',
   'Outils de Détection',
   'Systèmes & Réseaux',
   'Scripting / Code',
@@ -19,6 +33,8 @@ export default function SkillsAdmin() {
   const [name, setName] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [adding, setAdding] = useState(false);
+
+  const categoriesList = Array.from(new Set([...CATEGORIES, ...skills.map(s => s.category)])).filter(Boolean) as string[];
 
   useEffect(() => {
     fetchSkills();
@@ -81,12 +97,18 @@ export default function SkillsAdmin() {
                 ))}
               </select>
             </div>
-            <button
-              disabled={adding || !name}
-              className="w-full bg-cyber-blue hover:bg-cyber-electric py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {adding ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Ajouter'}
-            </button>
+            {(() => {
+              const isDisabled = Boolean(adding) || (name ?? '').toString().trim().length === 0;
+              return (
+                <button
+                  type="submit"
+                  aria-disabled={isDisabled}
+                  className={`w-full bg-cyber-blue hover:bg-cyber-electric py-2.5 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+                >
+                  {adding ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Ajouter'}
+                </button>
+              );
+            })()}
           </form>
         </div>
 
@@ -95,7 +117,7 @@ export default function SkillsAdmin() {
           {loading ? (
             <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-cyber-cyan" /></div>
           ) : (
-            CATEGORIES.map(cat => {
+            categoriesList.map(cat => {
               const catSkills = skills.filter(s => s.category === cat);
               if (catSkills.length === 0) return null;
               return (
