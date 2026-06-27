@@ -167,6 +167,7 @@ export default function Skills({ skills }: { skills: Skill[] }) {
                       <div key={skill.id} className="space-y-2">
                         <div className="flex justify-between items-center text-sm">
                           <span className="font-bold text-slate-700 dark:text-slate-300">{skill.name}</span>
+                        </div>
                       </div>
                     ))
                   ) : (
