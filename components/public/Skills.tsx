@@ -167,17 +167,6 @@ export default function Skills({ skills }: { skills: Skill[] }) {
                       <div key={skill.id} className="space-y-2">
                         <div className="flex justify-between items-center text-sm">
                           <span className="font-bold text-slate-700 dark:text-slate-300">{skill.name}</span>
-                          <span className="text-slate-400 font-mono">90%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: "90%" }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className={`h-full bg-gradient-to-r from-primary to-secondary`}
-                          />
-                        </div>
                       </div>
                     ))
                   ) : (

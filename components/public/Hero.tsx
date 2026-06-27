@@ -157,7 +157,7 @@ export default function Hero({ profile }: { profile: Partial<Profile> }) {
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-4 left-12 px-4 py-2 bg-white dark:bg-cyber-dark rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 flex items-center gap-2"
+              className="absolute bottom-8 left-8 z-20 px-4 py-2 bg-white dark:bg-cyber-dark rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 flex items-center gap-2"
             >
               <div className="w-2 h-2 rounded-full bg-primary"></div>
               <span className="text-xs font-bold text-slate-900 dark:text-white">Blue Team Specialist</span>
