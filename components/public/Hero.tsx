@@ -109,7 +109,7 @@ export default function Hero({ profile }: { profile: Partial<Profile> }) {
               <Link href={profile.social_links?.linkedin || 'www.linkedin.com/in/koneismael'} target="_blank" className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
                 <Linkedin className="w-6 h-6" />
               </Link>
-              <Link href={`mailto:${profile.social_links?.email}?subject=Prise de contact - Portfolio&body=Bonjour Ismaël,%0A%0A`} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
+              <Link href={`mailto:${profile.social_links?.email || 'ikone.mael@gmail.com'}?subject=${encodeURIComponent('Prise de contact - Portfolio')}&body=${encodeURIComponent('Bonjour Ismaël,\n\n')}`} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-primary transition-all border border-slate-100 dark:border-slate-800">
                 <Mail className="w-6 h-6" />
               </Link>
             </motion.div>
